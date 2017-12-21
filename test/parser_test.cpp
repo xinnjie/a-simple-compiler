@@ -7,24 +7,24 @@
 
 using namespace std;
 int main() {
-//    SymbolTable test;
-    SymbolTable st1;
-    st1.insert(Symbol("hello", Type(tag::TYPE_CHAR)));
-    try {
-        st1.find("not_exist");
-    }
-    catch (symbol_not_exist_error  e) {
-        cout << e.what() << endl;
-    }
-
-    SymbolTable st2 = SymbolTable(st1);
-    st2.find("hello");
-    try {
-        st2.find("not_exist");
-    }
-    catch (symbol_not_exist_error  e) {
-        cout << e.what() << endl;
-    }
+////    SymbolTable test;
+//    SymbolTable st1;
+//    st1.insert(Symbol(<#initializer#>, Type(tag::TYPE_CHAR), 0, 0, "hello"));
+//    try {
+//        st1.find_type("not_exist");
+//    }
+//    catch (symbol_not_exist_error  e) {
+//        cout << e.what() << endl;
+//    }
+//
+//    SymbolTable st2 = SymbolTable(st1);
+//    st2.find_type("hello");
+//    try {
+//        st2.find_type("not_exist");
+//    }
+//    catch (symbol_not_exist_error  e) {
+//        cout << e.what() << endl;
+//    }
 
 
 //    Parser destruct test

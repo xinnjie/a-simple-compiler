@@ -7,10 +7,8 @@
 
 
 #include "token_related/Tokenizer.h"
-#include "Node.h"
+#include "MiddleLanRelated/Node.h"
 #include "symbols_related/Type.h"
-#include "symbols_related/SymbolsManager.h"
-#include "symbols_related/TypeManager.h"
 
 class Parser {
 private:
@@ -26,8 +24,10 @@ private:
     bool maybe(const string &lexeme);
     bool maybe(const vector<string> &lexemes);
     Token if_keyword_more_specific(const Token &t);
-    SymbolsManager symbols_manager;
-    TypeManager type_manager;
+
+//    SymbolsManager symbols_manager;
+//    TypeManager type_manager;
+    TableManager table_manager;
 
 
 public:

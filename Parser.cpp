@@ -74,7 +74,7 @@ void Parser::move() {
 }
 
 Stmts * Parser::match_stmts() {
-    Stmts *ss = new Stmts(symbols_manager.get_current_symbols());
+    Stmts *ss = new Stmts(table_manager);
     while (!maybe(tag::NONE) && !maybe("}")) {
         ss->insert(match_stmt());
     }
@@ -109,7 +109,7 @@ Node * Parser::match_stmt() {
                 match(tag::ELSE);
                 false_stmt = match_stmt();
             }
-            return new IfElse(symbols_manager.get_current_symbols(), abool, true_stmt, false_stmt);
+            return new IfElse(table_manager, abool, true_stmt, false_stmt);
         }
         case tag::WHILE:{
 //            while (abool) stmt
@@ -117,14 +117,14 @@ Node * Parser::match_stmt() {
             Expr *abool = match_expr();
             match(")");
             Node *stmt = match_stmt();
-            return new While(symbols_manager.get_current_symbols(), abool, stmt);
+            return new While(table_manager, abool, stmt);
         }
         case tag::DELIMITER: {
             match("{");
-            symbols_manager.step_in();
+            table_manager.step_in();
             Node *ss = match_stmts();
             match("}");
-            symbols_manager.step_back();
+            table_manager.step_back();
             return ss;
         }
         default:{
@@ -143,13 +143,12 @@ Token Parser::if_keyword_more_specific(const Token &t) {
 
 decl *Parser::match_decl() {
     Type &t = match_type();
-    Symbol s(cur_token.lexeme, t);
+    Symbol s(table_manager.get_current_symbols(), cur_token.lexeme, t);
     match(tag::ID);
-    if (symbols_manager.contains_cur_field(s.name)) throw symbol_redefine_error(s.name);
-
-    symbols_manager.insert(s);
+    if (table_manager.contains_symbol_in_cur_field(s.name)) throw symbol_redefine_error(s.name);
+    table_manager.insert(s);
     match(";");
-    return new decl(symbols_manager.get_current_symbols(), t, s);
+    return new decl(table_manager, t, s);
 
 }
 
@@ -163,9 +162,9 @@ Type &Parser::match_type() {
         int length = stoi(cur_token.lexeme);
         match(tag::INTEGER);
         match("]");
-        return type_manager.create_array_type(type_manager.get_basic_type(category), length);
+        return table_manager.create_array_type(table_manager.get_basic_type(category), length);
     }
-    return type_manager.get_basic_type(category);
+    return table_manager.get_basic_type(category);
 }
 
 Expr * Parser::match_expr() {
@@ -250,14 +249,14 @@ Expr * Parser::match_expr(tag t) {
                 move();
                 Expr *right = match_expr(to_match);
                 if (meet_first) {
-                    bi_opt = new BinaryOpt(symbols_manager.get_current_symbols(), opt_tag, left, right);
+                    bi_opt = new BinaryOpt(table_manager, opt_tag, left, right);
                     meet_first = false;
                     if (match_once) {
                         return  bi_opt;
                     }
                 }
                 else {
-                    bi_opt = new BinaryOpt(symbols_manager.get_current_symbols(), opt_tag, bi_opt, right);
+                    bi_opt = new BinaryOpt(table_manager, opt_tag, bi_opt, right);
                 }
             }
             if (bi_opt) return bi_opt;
@@ -267,7 +266,7 @@ Expr * Parser::match_expr(tag t) {
 //            !/- factor
         case tag::UNARY: {
             if (maybe("!") || maybe("-")) {
-                return new UnaryOpt(symbols_manager.get_current_symbols(), lexeme2tag.at(cur_token.lexeme), match_expr(tag::FACTOR));
+                return new UnaryOpt(table_manager, lexeme2tag.at(cur_token.lexeme), match_expr(tag::FACTOR));
             }
             else return match_expr(tag::FACTOR);
         }
@@ -306,21 +305,21 @@ assign * Parser::match_assign() {
     //todo:
 //    if (!Type::type_fit_assign(left, right_expr)) throw assign_type_not_match();
     match(";");
-    return new assign(symbols_manager.get_current_symbols(), left, right_expr);
+    return new assign(table_manager, left, right_expr);
 }
 
 Lvalue * Parser::match_lvalue() {
     string may_id = cur_token.lexeme;
     match(tag::ID);
-    auto symbol = symbols_manager.find(may_id);
+    auto symbol = table_manager.find_symbol(may_id);
     if (maybe("[")) {
 //        is array
         match("[");
         Expr *expr = match_expr();
         match("]");
-        return new Lvalue(symbols_manager.get_current_symbols(), symbol, expr);
+        return new Lvalue(table_manager, symbol, expr);
     }
-    return new Lvalue(symbols_manager.get_current_symbols(), symbol);
+    return new Lvalue(table_manager, symbol);
 }
 
 Rvalue * Parser::match_rvalue() {
@@ -329,16 +328,16 @@ Rvalue * Parser::match_rvalue() {
     match(tag::CONSTANT);
     switch (t) {
         case tag::INTEGER: {
-            return new Rvalue(symbols_manager.get_current_symbols(), Type::INT_TYPE, lexeme);
+            return new Rvalue(table_manager, Type::INT_TYPE, lexeme);
         }
         case tag::CHAR: {
-            return new Rvalue(symbols_manager.get_current_symbols(), Type::CHAR_TYPE, lexeme);
+            return new Rvalue(table_manager, Type::CHAR_TYPE, lexeme);
         }
         case tag::REAL: {
-            return new Rvalue(symbols_manager.get_current_symbols(), Type::REAL_TYPE, lexeme);
+            return new Rvalue(table_manager, Type::REAL_TYPE, lexeme);
         }
         case tag::BOOL: {
-            return new Rvalue(symbols_manager.get_current_symbols(), Type::BOOL_TYPE, lexeme);
+            return new Rvalue(table_manager, Type::BOOL_TYPE, lexeme);
         }
         default: {
             throw syntax_error("constant Type not matched");

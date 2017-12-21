@@ -18,6 +18,7 @@ enum class tag {
 
     OR, AND, REVERSE, EQ, NE, GT, LT, LE, GE,
     ADD, SUB, MULTIPLY, DEVIDE, MINUS,
+    INDEX,
 
 
     BOOL, JOIN, EQUALITY, REL, EXPR, TERM, UNARY, FACTOR,

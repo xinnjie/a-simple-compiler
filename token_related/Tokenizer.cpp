@@ -283,8 +283,7 @@ char Tokenizer::give_back_printable(){
                 else if (isprint(peek) || isspace(peek)){
                     result = peek;
                     state = 1;
-                }
-                else throw syntax_error("find unprintable character");
+                } else throw syntax_error("find_type unprintable character");
                 break;
             }
             case 1: {

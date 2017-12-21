@@ -7,7 +7,8 @@
 
 
 using namespace std;
-Type &TypeManager::find(const std::string &name) {
+
+Type &TypeManager::find_type(const std::string &name) {
     auto it = types.find(name);
     if (it != types.end()) return *(it->second);
     throw type_not_exist_error(name);
