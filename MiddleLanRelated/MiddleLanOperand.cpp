@@ -17,11 +17,13 @@ std::string MiddleLanVariable::to_string() const {
     return symbol.name;
 }
 
-std::string MiddleLanArray::to_string() const {
-    return symbol.name + "[" + index.to_string() + "]";
+MiddleLanVariable::MiddleLanVariable(const BasicLvalue &basic_lvalue) : MiddleLanOperand(basic_lvalue.symbol.type),
+                                                                        symbol(basic_lvalue.symbol) {
 }
 
-MiddleLanArray::MiddleLanArray(const Type &type, const Symbol &symbol, const MiddleLanOperand &index)
-        : MiddleLanOperand(type), symbol(symbol), index(index) {}
+std::string MiddleLanArray::to_string() const {
+    return symbol.name + "[" + index->to_string() + "]";
+}
 
-MiddleLanOperand::MiddleLanOperand(const Type &type) : type(type) {}
+MiddleLanArray::MiddleLanArray(const ArraySymbol &symbol, std::shared_ptr<MiddleLanOperand> index)
+        : MiddleLanOperand(symbol.type), symbol(symbol), index(index), element_type(symbol.element_type) {}

@@ -311,15 +311,15 @@ assign * Parser::match_assign() {
 Lvalue * Parser::match_lvalue() {
     string may_id = cur_token.lexeme;
     match(tag::ID);
-    auto symbol = table_manager.find_symbol(may_id);
+    auto &symbol = table_manager.find_symbol(may_id);
     if (maybe("[")) {
 //        is array
         match("[");
         Expr *expr = match_expr();
         match("]");
-        return new Lvalue(table_manager, symbol, expr);
+        return new ArrayLvalue(table_manager, dynamic_cast<ArraySymbol &>(symbol), expr);
     }
-    return new Lvalue(table_manager, symbol);
+    return new BasicLvalue(table_manager, symbol);
 }
 
 Rvalue * Parser::match_rvalue() {

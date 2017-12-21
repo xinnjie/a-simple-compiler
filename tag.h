@@ -9,9 +9,9 @@ enum class tag {
     CHAR, STRING, REAL, INTEGER, // for Type of constant
     CONSTANT, // CHAR, STRING, REAL, INTEGER is CONSTANT
 
-    TYPE_CHAR, TYPE_REAL, TYPE_INTEGER, TYPE_BOOL, TYPE_STRING,  // for Type
+    TYPE_CHAR, TYPE_REAL, TYPE_INTEGER, TYPE_BOOL, TYPE_STRING,// for Type
     BASIC_TYPE, // TYPE CHAR, REAL, INTEGER is basic Type
-    TYPE_ARRAY,
+    TYPE_ARRAY, TYPE_STRUCT,
     TYPE_FUNC,
 
     INDEX_TYPE_LVALUE, INDEX_TYPE_NUM,
@@ -20,6 +20,8 @@ enum class tag {
     ADD, SUB, MULTIPLY, DEVIDE, MINUS,
     INDEX,
 
+    // 生成四元式
+            ASSIGN,
 
     BOOL, JOIN, EQUALITY, REL, EXPR, TERM, UNARY, FACTOR,
 

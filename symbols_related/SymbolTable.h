@@ -40,6 +40,21 @@ public:
      */
     Symbol(const SymbolTable &cur_table, const std::string &name, const Type &type, int addr = 0) :
             cur_table(cur_table), name(name), addr(addr), type(type) {}
+
+    virtual ~Symbol() = default;
+
+    bool is_array() {
+        return type.t == tag::TYPE_ARRAY;
+    }
+};
+
+class ArraySymbol : public Symbol {
+public:
+    const Type &element_type;
+
+    ArraySymbol(const SymbolTable &cur_table, const std::string &name, const Type &type, const Type &element_type,
+                int addr = 0) :
+            Symbol(cur_table, name, type, addr), element_type(element_type) {}
 };
 
 
@@ -67,6 +82,13 @@ public:
         addr += 4; // todo: addr按照type的大小增加地址
         table.insert({cp.name, cp});
     }
+
+    /*!
+     * 返回要名字为 name 的Symbol引用，若查不到，会抛出 symbol_not_exist_error 异常
+     * 若要确认 符号表中是否含有 叫 name 的符号，请使用 contains or contain_cur_field 方法
+     * @param name 要查找的 Symbol 名字
+     * @return 名字为 name 的 Symbol 引用
+     */
     Symbol &find(const std::string &name);
 };
 
