@@ -31,6 +31,8 @@ public:
 
     void insert(const Symbol &s);
 
+    Symbol &insert_basic_variable(const std::string &name, const Type &type);
+
     Symbol &insert_temp(const Type &t);
 
     Symbol &find_symbol(const std::string &name);

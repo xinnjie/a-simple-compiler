@@ -46,6 +46,10 @@ public:
     bool is_array() {
         return type.t == tag::TYPE_ARRAY;
     }
+
+    bool is_func() {
+        return type.t == tag::TYPE_FUNC;
+    }
 };
 
 class ArraySymbol : public Symbol {
@@ -55,6 +59,16 @@ public:
     ArraySymbol(const SymbolTable &cur_table, const std::string &name, const Type &type, const Type &element_type,
                 int addr = 0) :
             Symbol(cur_table, name, type, addr), element_type(element_type) {}
+};
+
+/*!
+ * FuncSymbol  函数类
+ * 包括 形参、返回值
+ */
+class FuncSymbol : public Symbol {
+public:
+
+    FuncSymbol(const SymbolTable &cur_table, const std::string &name, const Type &type, int addr);
 };
 
 
@@ -75,13 +89,7 @@ public:
 
 // modification, only able to modify current field's SymbolTable;
 // and check if s already in the table, throw exception
-    void insert(const Symbol &s) {
-        if (contains_cur_field(s.name)) throw duplicate_symbol_error(s.name);
-        Symbol cp = s;
-        cp.addr = addr;
-        addr += 4; // todo: addr按照type的大小增加地址
-        table.insert({cp.name, cp});
-    }
+    Symbol &insert(const Symbol &s);
 
     /*!
      * 返回要名字为 name 的Symbol引用，若查不到，会抛出 symbol_not_exist_error 异常

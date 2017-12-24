@@ -14,7 +14,8 @@ class Type {
 public:
     tag t;
     Type(tag t) : t(t) {}
-    virtual ~Type(){}
+
+    virtual ~Type() = default;
 
 
     // only for basic Type

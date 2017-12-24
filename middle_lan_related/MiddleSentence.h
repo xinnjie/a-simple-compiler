@@ -9,12 +9,13 @@
 #include <string>
 #include <ostream>
 #include "../tag.h"
-#include "MiddleLanOperand.h"
+
+class MiddleLanOperand;
 
 class MiddleSentence {
 public:
     tag opt;
-    const std::shared_ptr<MiddleLanOperand> left_oprand, right_operand, result;
+    const std::shared_ptr<MiddleLanOperand> left_operand, right_operand, result;
 
     MiddleSentence(tag opt, const std::shared_ptr<MiddleLanOperand> &left_oprand,
                    const std::shared_ptr<MiddleLanOperand> &right_operand,

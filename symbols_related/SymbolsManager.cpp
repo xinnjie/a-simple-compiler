@@ -46,3 +46,7 @@ Symbol &SymbolsManager::insert_temp(const Type &t) {
     current_symbols->insert(Symbol(get_current_symbols(), temp_name, t));
     return current_symbols->find(temp_name);
 }
+
+Symbol &SymbolsManager::insert_basic_variable(const std::string &name, const Type &type) {
+    return current_symbols->insert(Symbol(*current_symbols, name, type));
+}

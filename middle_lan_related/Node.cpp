@@ -4,6 +4,7 @@
 
 #include <stack>
 #include "Node.h"
+#include "MiddleLanOperand.h"
 
 using namespace std;
 //关于为什么使用 shared_ptr, semantic 中难免会多次加入 一个变量  比如 b = a + a, a 会被 压栈两次

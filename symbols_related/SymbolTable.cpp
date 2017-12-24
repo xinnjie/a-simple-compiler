@@ -25,3 +25,15 @@ bool SymbolTable::contains(const std::string &name) noexcept {
     }
     return false;
 }
+
+Symbol &SymbolTable::insert(const Symbol &s) {
+    if (contains_cur_field(s.name)) throw duplicate_symbol_error(s.name);
+    Symbol cp = s;
+    cp.addr = addr;
+    addr += 4; // todo: addr按照type的大小增加地址
+    auto pair = table.insert({cp.name, cp});
+    return pair.first->second;
+}
+
+FuncSymbol::FuncSymbol(const SymbolTable &cur_table, const std::string &name, const Type &type, int addr) : Symbol(
+        cur_table, name, type, addr) {}

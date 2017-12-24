@@ -7,8 +7,7 @@
 
 
 #include "token_related/Tokenizer.h"
-#include "MiddleLanRelated/Node.h"
-#include "symbols_related/Type.h"
+#include "middle_lan_related/Node.h"
 
 class Parser {
 private:

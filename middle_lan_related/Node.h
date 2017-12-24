@@ -11,8 +11,8 @@
 #include "../tag.h"
 #include "../symbols_related/SymbolTable.h"
 #include "../symbols_related/Type.h"
-#include "MiddleSentence.h"
 #include "../symbols_related/TableManager.h"
+#include "MiddleSentence.h"
 
 // Node需要保有一份 TableManager & (----Type---Manager-- 划去) 的引用
 // 原因：TableManager： 个别Node需要创建临时变量，那么需要利用TableManager来删减临时变量

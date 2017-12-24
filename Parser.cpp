@@ -143,6 +143,7 @@ Token Parser::if_keyword_more_specific(const Token &t) {
 
 decl *Parser::match_decl() {
     Type &t = match_type();
+    //todo: 根据不同类型（Type, ArrayType, FuncType）生成不同的类型的 Symbol
     Symbol s(table_manager.get_current_symbols(), cur_token.lexeme, t);
     match(tag::ID);
     if (table_manager.contains_symbol_in_cur_field(s.name)) throw symbol_redefine_error(s.name);

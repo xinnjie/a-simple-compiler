@@ -10,12 +10,8 @@
 #include <ostream>
 #include "../symbols_related/Type.h"
 #include "../symbols_related/SymbolTable.h"
-#include "Node.h"
 
 class Rvalue;
-
-class ArrayLvalue;
-
 class BasicLvalue;
 
 class MiddleLanOperand {
@@ -25,9 +21,10 @@ public:
     explicit MiddleLanOperand(const Type &type) : type(type) {
     }
 
+    virtual ~MiddleLanOperand() {};
+
     virtual std::string to_string() const = 0;
 
-    virtual ~MiddleLanOperand() = default;
 };
 
 // MiddleLandConstant <-> Rvalue
@@ -40,6 +37,7 @@ public:
 
     std::string to_string() const override;
 
+    ~MiddleLanConstant() override {}
 };
 
 
@@ -52,6 +50,8 @@ public:
     explicit MiddleLanVariable(const BasicLvalue &basic_lvalue);
 
     std::string to_string() const override;
+
+    ~MiddleLanVariable() override {}
 };
 
 class MiddleLanArray : public MiddleLanOperand {
@@ -60,14 +60,12 @@ public:
     const Type &element_type;
     std::shared_ptr<MiddleLanOperand> index; // 可以是常量类型 eg.a[4]
     // 也可以是变量类型 eg.a[$t]
+
     MiddleLanArray(const ArraySymbol &symbol, std::shared_ptr<MiddleLanOperand> index);
 
-//    /*!
-//     * todo: 目前参数不能是lvalue，因为MiddleLanArray构造函数第三个参数是 const MiddleLanOperand &index, 无法对应到Lvalue.expr（类型为 unique_ptr<Expr>）
-//     * @param lvalue
-//     */
-//    MiddleLanArray(const ArrayLvalue &lvalue);
     std::string to_string() const override;
+
+    ~MiddleLanArray() override {}
 };
 
 
